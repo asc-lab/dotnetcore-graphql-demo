@@ -1,0 +1,152 @@
+query {
+  projects(where: {
+    name: {
+      contains: "Fa"
+    }
+    tasks: {
+      some: {
+        description: { contains: "risk" }
+      }
+    }
+  }) {
+    name
+    tasks {
+      description
+    }
+  }
+}
+
+------------------
+
+query {
+  projects(where: {
+    name: {
+      contains: "a"
+    }
+    tasks: {
+      some: {
+        description: { contains: "Build" }
+      }
+    }
+  }) {
+    name
+    tasks {
+      description
+      status
+      cost
+      assignee {
+        name
+      }
+    }
+  }
+}
+
+--------------------
+
+query {
+  projects(where: {
+    name: {
+      contains: "a"
+    }
+    tasks: {
+      some: {
+        description: { contains: "Build" }
+      }
+    }
+  }) {
+    id
+    name
+    tasks {
+      description
+      status
+      cost
+      assignee {
+        name
+      }
+    }
+  }
+}
+
+--------------------------------------
+
+mutation {
+  addProject(input: {
+    name: "Prepare pptx for .net guild"
+  }) {
+    project {
+      name
+    }
+  }
+}
+
+mutation {
+  addTask(input: {
+    projectName: "Falcon", 
+    taskDescription: "Add Signal R"
+    }) {
+    
+    task {
+      description
+    }
+    errors {
+      code
+    }
+  }
+}
+
+----------------------------------------------------
+
+query {
+  projects(first:10, order: {
+    name: ASC
+  }) {
+    edges {
+      node {
+        name
+        tasks {
+          description
+        }
+      }
+      cursor
+    }
+    pageInfo {
+      startCursor
+      endCursor
+      hasNextPage,
+      hasPreviousPage
+    }
+  }
+}
+
+-----------------------------------------------------
+
+query {
+  projects(first:10, where: {
+    name: {
+      contains: "a"
+    }
+    tasks: {
+      some: {
+        description: { contains: "Build" }
+      }
+    }
+  }, order: {
+    name: ASC
+  }) {
+    edges {
+      node {
+        name
+        tasks {
+          description
+        }
+      }
+      cursor
+    }
+    pageInfo {
+      startCursor
+      endCursor
+      hasNextPage,
+      hasPreviousPage
+    }
+  }
+}

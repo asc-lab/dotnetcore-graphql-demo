@@ -6,14 +6,17 @@ namespace HotChocolateWithEfDemo.Db
 {
     public class DbSchemaUpdater
     {
-        public static void UpgradeDb()
+        public static void UpgradeDb(string connectionString)
         {
             var upgrader =
                 DeployChanges.To
-                    .PostgresqlDatabase("User ID=lab_user;Password=lab_pass;Database=graphqlfun;Host=localhost;Port=5432")
+                    .PostgresqlDatabase(connectionString)
                     .WithScriptsEmbeddedInAssembly(Assembly.GetExecutingAssembly())
                     .LogToConsole()
-                    .Build();    
+                    .WithTransactionPerScript()
+                    .Build();
+
+            EnsureDatabase.For.PostgresqlDatabase(connectionString);
             
             var result = upgrader.PerformUpgrade();
 
